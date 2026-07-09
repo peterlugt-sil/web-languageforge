@@ -5,6 +5,7 @@ namespace Site\Controller;
 use Api\Library\Shared\Palaso\StringUtil;
 use Api\Library\Shared\SilexSessionHelper;
 use Api\Model\Shared\FeaturedProjectListModel;
+use Sil\PhpEnv\Env;
 use Api\Model\Shared\Rights\SystemRoles;
 use Api\Model\Shared\Rights\Operation;
 use Api\Model\Shared\Rights\Domain;
@@ -26,6 +27,8 @@ class Base
         $this->data["version"] = VERSION;
         $this->data["useMinifiedJs"] = ENVIRONMENT == "production";
         $this->data["http_host"] = $_SERVER["HTTP_HOST"];
+        $this->data["posthogKey"] = Env::get("POSTHOG_PROJECT_TOKEN", "");
+        $this->data["posthogHost"] = Env::get("POSTHOG_HOST", "");
 
         $this->data["jsFiles"] = [];
         $this->data["jsNotMinifiedFiles"] = [];

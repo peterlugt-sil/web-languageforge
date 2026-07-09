@@ -3,6 +3,7 @@ const ROOT = path.resolve(__dirname, './src/angular-app');
 const DESTINATION = path.resolve(__dirname, 'src', 'dist');
 const workboxPlugin = require('workbox-webpack-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+require('dotenv').config();
 
 /**
  * Webpack Plugins
@@ -84,6 +85,10 @@ module.exports = {
                   { from: '../../node_modules/ng-table/bundles/ng-table.min.css', to: 'ng-table' },
                   { from: '../../node_modules/ng-table/bundles/ng-table.min.css.map', to: 'ng-table' },
             ],
+          }),
+          new webpack.DefinePlugin({
+            'process.env.POSTHOG_PROJECT_TOKEN': JSON.stringify(process.env.POSTHOG_PROJECT_TOKEN || ''),
+            'process.env.POSTHOG_HOST': JSON.stringify(process.env.POSTHOG_HOST || 'https://eu.i.posthog.com'),
           }),
           new webpack.ProvidePlugin({
             process: 'process/browser',

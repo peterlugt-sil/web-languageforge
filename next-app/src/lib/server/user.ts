@@ -4,15 +4,17 @@ import { sf } from '$lib/server/sf'
 type LegacySession = {
 	userId: string,
 	userProjectRole: string,
+	username: string,
 }
 
 type User = {
 	id: string,
 	role: string,
+	username: string,
 }
 
 export async function fetch_current_user(cookie: string): Promise<User> {
-	const { userId, userProjectRole }: LegacySession = await sf({
+	const { userId, userProjectRole, username }: LegacySession = await sf({
 		name: 'session_getSessionData',
 		cookie,
 	})
@@ -24,5 +26,6 @@ export async function fetch_current_user(cookie: string): Promise<User> {
 	return {
 		id: userId,
 		role: userProjectRole,
+		username,
 	}
 }

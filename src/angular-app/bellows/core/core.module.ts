@@ -18,6 +18,7 @@ import {NoticeService} from './notice/notice.service';
 import {OfflineModule} from './offline/offline.module';
 import {SessionService} from './session.service';
 import {UtilityService} from './utility.service';
+import {PosthogService} from './posthog.service';
 
 export const CoreModule = angular
   .module('coreModule', [
@@ -38,6 +39,7 @@ export const CoreModule = angular
   .service('applicationHeaderService', ApplicationHeaderService)
   .service('utilService', UtilityService)
   .service('noticeService', NoticeService)
+  .service('posthogService', PosthogService)
   .filter('bytes', BytesFilter)
   .filter('relativetime', RelativeTimeFilter)
   .filter('encodeURI', ['$window', EncodeURIFilter])

@@ -5,6 +5,7 @@ import { ApplicationHeaderService } from '../../core/application-header.service'
 import { BreadcrumbService } from '../../core/breadcrumbs/breadcrumb.service';
 import { SiteWideNoticeService } from '../../core/site-wide-notice-service';
 import { NoticeService } from '../../core/notice/notice.service';
+import { PosthogService } from '../../core/posthog.service';
 import { Session, SessionService } from '../../core/session.service';
 import { Project } from '../../shared/model/project.model';
 
@@ -29,7 +30,8 @@ export class ProjectsAppController implements angular.IController {
                     'silNoticeService',
                     'breadcrumbService',
                     'siteWideNoticeService',
-                    'applicationHeaderService'
+                    'applicationHeaderService',
+                    'posthogService'
                    ];
   constructor(private $window: angular.IWindowService,
               private projectService: ProjectService,
@@ -37,7 +39,8 @@ export class ProjectsAppController implements angular.IController {
               private notice: NoticeService,
               private breadcrumbService: BreadcrumbService,
               private siteWideNoticeService: SiteWideNoticeService,
-              private applicationHeaderService: ApplicationHeaderService
+              private applicationHeaderService: ApplicationHeaderService,
+              private posthog: PosthogService
              ) { }
 
   async $onInit(): Promise<void> {
@@ -56,6 +59,8 @@ export class ProjectsAppController implements angular.IController {
         session.hasSiteRight(this.sessionService.domain.PROJECTS, this.sessionService.operation.CREATE);
       this.rights.showControlBar = this.rights.canCreateProject;
       this.siteName = session.baseSite();
+
+      this.posthog.capture('$pageview');
     });
 
     this.notice.checkUrlForNotices();

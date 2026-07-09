@@ -2,10 +2,17 @@
 	import { page } from '$app/stores'
 	import '$lib/app.css'
 	import Header from '$lib/Header.svelte'
+	import posthog from 'posthog-js'
+	import { browser } from '$app/environment'
 
 	let menu_toggle = false
+	let initialized = false
 
 	$: current_page = $page.url.pathname
+	$: if (browser && initialized) posthog.capture('$pageview', { $current_url: $page.url.href })
+
+	import { onMount } from 'svelte'
+	onMount(() => { initialized = true })
 
 	function open() {
 		menu_toggle = true

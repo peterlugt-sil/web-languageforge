@@ -3,6 +3,7 @@ import * as angular from 'angular';
 import { ProjectSettings } from '../shared/model/project-settings.model';
 import { Project } from '../shared/model/project.model';
 import { ApiService, JsonRpcCallback } from './api/api.service';
+import { PosthogService } from './posthog.service';
 
 export class Session {
   constructor(public data?: SessionData) {}
@@ -105,8 +106,8 @@ export class SessionService {
   private session: Session;
   private sessionDataPromise: angular.IPromise<SessionData>;
 
-  static $inject: string[] = ['apiService', '$q', 'exceptionHandler'];
-  constructor(private api: ApiService, private $q: angular.IQService) {
+  static $inject: string[] = ['apiService', '$q', 'exceptionHandler', 'posthogService'];
+  constructor(private api: ApiService, private $q: angular.IQService, _exceptionHandler: unknown, private posthog: PosthogService) {
     const domains: Domains = {
       ANY:       this.rightsFunction(1000),
       USERS:     this.rightsFunction(1100),
@@ -154,6 +155,10 @@ export class SessionService {
 
     return this.fetchSessionData(forceRefresh).then((data: SessionData) => {
       this.session.data = data;
+
+      if (data.userId) {
+        this.posthog.identify(data.userId, { username: data.username });
+      }
 
 			if (callback) callback(this.session);
 
