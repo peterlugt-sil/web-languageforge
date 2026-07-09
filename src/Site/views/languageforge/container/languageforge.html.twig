@@ -163,6 +163,9 @@
                 autocapture: true,
                 person_profiles: 'identified_only',
             });
+            // Org-wide PostHog project is shared across SIL tools — this super property
+            // tags every event so LanguageForge's data can be filtered out of the rest.
+            posthog.register({ product: 'languageforge' });
         </script>
     {% endif %}
 {% endblock %}

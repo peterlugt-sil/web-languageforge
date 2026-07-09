@@ -18,6 +18,9 @@ export const load = async ({ data }: { data: LayoutData }) => {
 				if (data?.user_id) ph.identify(data.user_id, { username: data.username })
 			},
 		})
+		// Org-wide PostHog project is shared across SIL tools — this super property tags
+		// every event so LanguageForge's data can be filtered out of the rest.
+		posthog.register({ product: 'languageforge' })
 	}
 
 	return {}
