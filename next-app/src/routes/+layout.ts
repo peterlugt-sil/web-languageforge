@@ -12,6 +12,9 @@ export const load = async ({ data }: { data: LayoutData }) => {
 			defaults: '2026-01-30',
 			autocapture: true,
 			person_profiles: 'identified_only',
+			capture_exceptions: true,
+			// network_timing is intentionally left off — it's a session-replay feature, not part of Web Vitals.
+			capture_performance: { web_vitals: true },
 			loaded: (ph) => {
 				// $pageview is captured by the reactive statement in +layout.svelte, which also
 				// covers the initial load — capturing it here too would double-count it.

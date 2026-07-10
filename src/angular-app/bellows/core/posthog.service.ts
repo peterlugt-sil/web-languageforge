@@ -24,6 +24,10 @@ export class PosthogService {
     this.$window.posthog?.capture(event, properties);
   }
 
+  captureException(error: unknown, properties?: Record<string, unknown>): void {
+    this.$window.posthog?.captureException(error, properties);
+  }
+
   reset(): void {
     this.$window.posthog?.reset();
   }
