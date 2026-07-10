@@ -13,7 +13,11 @@ export class PosthogService {
   constructor(private $window: WindowWithPosthog) { }
 
   identify(userId: string, properties?: Record<string, unknown>): void {
-    this.$window.posthog?.identify(userId, properties);
+    // Every full-page navigation re-runs this from scratch, so without this check the
+    // same already-identified user would re-fire a redundant $set event on every pageview.
+    if (this.$window.posthog != null && this.$window.posthog.get_distinct_id() !== userId) {
+      this.$window.posthog.identify(userId, properties);
+    }
   }
 
   capture(event: string, properties?: Record<string, unknown>): void {

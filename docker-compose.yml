@@ -55,6 +55,8 @@ services:
       # To use LexBox locally (in docker) you'll also need to uncomment the networks here and at the top of the file
       - LEX_BOX_HOST=http://admin.localhost
       - ENVIRONMENT=development
+      - POSTHOG_PROJECT_TOKEN
+      - POSTHOG_HOST
       - WEBSITE=localhost
       - DATABASE=scriptureforge
       - MONGODB_CONN=mongodb://lf-db:27017
@@ -204,6 +206,9 @@ services:
     build:
       context: next-app
       dockerfile: ../docker/next-app/Dockerfile.next-app
+      args:
+        - PUBLIC_POSTHOG_KEY
+        - PUBLIC_POSTHOG_HOST
     image: lf-next-app
     container_name: lf-next-app
     environment:

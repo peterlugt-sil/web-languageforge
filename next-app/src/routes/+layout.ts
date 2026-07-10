@@ -15,7 +15,12 @@ export const load = async ({ data }: { data: LayoutData }) => {
 			loaded: (ph) => {
 				// $pageview is captured by the reactive statement in +layout.svelte, which also
 				// covers the initial load — capturing it here too would double-count it.
-				if (data?.user_id) ph.identify(data.user_id, { username: data.username })
+				// This load() function re-runs on every client-side navigation, so guard against
+				// re-identifying the same already-identified user, which would otherwise fire a
+				// redundant $set event on every pageview.
+				if (data?.user_id && ph.get_distinct_id() !== data.user_id) {
+					ph.identify(data.user_id, { username: data.username })
+				}
 			},
 		})
 		// Org-wide PostHog project is shared across SIL tools — this super property tags

@@ -13,3 +13,4 @@ docker-scan-results.txt
 test-results
 test-storage-state
 *storageState.json
+.env
